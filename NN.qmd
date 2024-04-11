@@ -4,7 +4,7 @@ format: pdf
 highlight-style: github
 code-block-bg: true
 code-block-border-left: "#31BAE9"
-title-block-style: plain
+# title-block-style: plain
 ---
 
 ## Neural Network Model

@@ -14,9 +14,20 @@ title-block-style: plain
 
 ```{r}
 library(readr)
-cardio_train <- read_delim("cardio_train.csv", 
-    delim = ";", escape_double = FALSE, trim_ws = TRUE)
-heart.logistic =  glm(cardio  ~  .,  family  =  "binomial",  data  =  cardio_train)
+cardio_train <- read_delim("cardio_train.csv",
+                           delim = ";", escape_double = FALSE, trim_ws = TRUE)
+
+cardio_train$gender = as.factor(cardio_train$gender)
+cardio_train$cholesterol = as.factor(cardio_train$cholesterol)
+cardio_train$gluc = as.factor(cardio_train$gluc)
+cardio_train$smoke = as.factor(cardio_train$smoke)
+cardio_train$alco = as.factor(cardio_train$alco)
+cardio_train$active = as.factor(cardio_train$active)
+cardio_train$cardio = as.factor(cardio_train$cardio)
+
+heart.logistic =  glm(cardio  ~  . - id,  family  =  "binomial",
+                      data  =  cardio_train)
+
 summary(heart.logistic)
 
 ```
