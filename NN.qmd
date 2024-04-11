@@ -1,0 +1,18 @@
+---
+title: "MATH 4322 Final Project Group 9"
+format: pdf
+highlight-style: github
+code-block-bg: true
+code-block-border-left: "#31BAE9"
+title-block-style: plain
+header-includes: 
+- \newcommand{\bi}{\begin{itemize}}
+- \newcommand{\ei}{\end{itemize}}
+- \newcommand{\iset}{\setlength\itemsep{1em}}
+- \usepackage{amsbsy}
+- \usepackage{hyperref}
+- \newcommand{\blue}[1]{\textcolor{blue}{#1}}
+- \newcommand{\red}[1]{\textcolor{red}{#1}}
+---
+
+## Neural Network Model
