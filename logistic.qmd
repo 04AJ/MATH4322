@@ -15,4 +15,16 @@ header-includes:
 - \newcommand{\red}[1]{\textcolor{red}{#1}}
 ---
 
+
+
 ## Logistic Regression
+
+
+```{r}
+library(readr)
+cardio_train <- read_delim("cardio_train.csv", 
+    delim = ";", escape_double = FALSE, trim_ws = TRUE)
+heart.logistic =  glm(cardio  ~  .,  family  =  "binomial",  data  =  cardio_train)
+summary(heart.logistic)
+
+```
