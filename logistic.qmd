@@ -6,11 +6,32 @@ code-block-bg: true
 code-block-border-left: "#31BAE9"
 title-block-style: plain
 ---
+## Introduction
+
+## Logistic Regression (Ryan Nguyen, Alan Johnson)
+
+\textcolor{red}{Paragraph explaining why we are using logistic regression models and the advantages and disadvantages of the model.}
 
 
+### Model Formula
 
-## Logistic Regression
+```{=html}
+<!--
 
+\begin{align}
+P(\text{cardio}=1|X) = \frac{
+&(\beta_0 + \beta_1 \times \text{age}+ \beta_2 \times \text{height}  + \beta_3 \times \text{weight} \\
+&+ \beta_4 \times \text{gender} + \beta_5 \times \text{ap\_hi} + \beta_6 \times \text{ap\_lo} \\
+&+ \beta_7 \times \text{cholesterol} + \beta_8 \times \text{gluc} + \beta_9 \times \text{smoke} \\
+&+ \beta_{10} \times \text{alco} + \beta_{11} \times \text{active} + \beta_{12} \times \text{cardio})}{1 + e^{\beta_0 + \beta_1 \times \text{age}+ \beta_2 \times \text{height}  + \beta_3 \times \text{weight} \\
+&+ \beta_4 \times \text{gender} + \beta_5 \times \text{ap\_hi} + \beta_6 \times \text{ap\_lo} \\
+&+ \beta_7 \times \text{cholesterol} + \beta_8 \times \text{gluc} + \beta_9 \times \text{smoke} \\
+&+ \beta_{10} \times \text{alco} + \beta_{11} \times \text{active} + \beta_{12} \times \text{cardio}}}
+\end{align}-->
+```
+$$
+P(cardio=1|X) = \frac{e^{(\beta_0 + \beta_1 X_1 + \beta_2 X_2 + \ldots + \beta_n X_n)}}{1 + e^{(\beta_0 + \beta_1 X_1 + \beta_2 X_2 + \ldots + \beta_n X_n)}}
+$$ **Model 1 - Include all predictors**
 
 ```{r}
 library(readr)
@@ -25,9 +46,107 @@ cardio_train$alco = as.factor(cardio_train$alco)
 cardio_train$active = as.factor(cardio_train$active)
 cardio_train$cardio = as.factor(cardio_train$cardio)
 
-heart.logistic =  glm(cardio  ~  . - id,  family  =  "binomial",
+heart.logistic1 =  glm(cardio  ~  . - id,  family  =  "binomial",
                       data  =  cardio_train)
 
-summary(heart.logistic)
+summary(heart.logistic1)
 
 ```
+\textcolor{red}{Paragraph explaining which predictors are significant (look at significance table output)}
+
+
+**Model 2 - Only include statistically significant predictors**
+
+```{r, warning=FALSE}
+heart.logistic2 =  glm(cardio  ~  age+height+weight+ap_hi+ap_lo+cholesterol+smoke+alco+active
+                         ,  family  =  "binomial",
+                      data  =  cardio_train)
+
+summary(heart.logistic2)
+```
+
+```{r,  warning=FALSE}
+step(heart.logistic2)
+```
+
+**Model 3 - Using predictors from stepwise regression**
+
+\textcolor{red}{Paragraph explaining the results of stepwise regression}
+
+```{r,  warning=FALSE}
+heart.logistic3 = glm(formula = cardio ~ age + height + weight + ap_hi + ap_lo +cholesterol + alco + active, family = "binomial", data = cardio_train)
+summary(heart.logistic3)
+```
+
+**Determining Best Model**
+```{r}
+extract_info  = function(model) {
+  deviance <- summary(model)$null.deviance
+  residual_deviance <- summary(model)$deviance
+  r_squared <- 1 - (residual_deviance / deviance)
+  AIC <- AIC(model)
+  BIC <- BIC(model)
+  
+  return(c(Null_Deviance = deviance,
+           Residual_Deviance = residual_deviance,
+           R_Squared = r_squared,
+           AIC = AIC,
+           BIC = BIC))
+}
+
+# Extract information from each model
+info1 <- extract_info(heart.logistic1)
+info2 <- extract_info(heart.logistic2)
+info3 <- extract_info(heart.logistic3)
+
+# Create a data frame to store the information
+model_info <- data.frame(
+  Model = c("heart.logistic1", "heart.logistic2", "heart.logistic3"),
+  Null_Deviance = c(info1["Null_Deviance"], info2["Null_Deviance"], info3["Null_Deviance"]),
+  Residual_Deviance = c(info1["Residual_Deviance"], info2["Residual_Deviance"], info3["Residual_Deviance"]),
+  R_Squared = c(info1["R_Squared"], info2["R_Squared"], info3["R_Squared"]),
+  AIC = c(info1["AIC"], info2["AIC"], info3["AIC"]),
+  BIC = c(info1["BIC"], info2["BIC"], info3["BIC"])
+)
+(model_info)
+```
+
+### Final Equation for Logistic Regression Model
+> \textcolor{blue}{Insert latex equation here}
+
+### Training/ Validation 
+```{r, warning=FALSE}
+set.seed(100)
+for(i in 1:10){
+  # initialize vector to store prediction errors
+test_errors = numeric(10)
+sample= sample.int(n = nrow(cardio_train), size = floor(0.80*nrow(cardio_train)))
+train.heart.logistic = cardio_train[sample,]
+test.heart.logistic = cardio_train[-sample,]
+
+train.logistic = glm(cardio ~ age + height + weight + ap_hi + ap_lo +cholesterol + alco + active, data = train.heart.logistic, family = "binomial")
+
+glm.pred = predict.glm(train.logistic, newdata = test.heart.logistic, type = "response")
+
+# Convert probability to binary
+test_predictions_binary = ifelse(glm.pred > 0.5, 1, 0)
+
+# Calculate test prediction error
+test_error= mean(test_predictions_binary != test.heart.logistic$cardio)
+
+test_errors[i] = test_error
+}
+
+(mean_test_error = mean(test_errors))
+```
+
+\textcolor{red}{Paragraph explaining the the procedure above and the mean error rate}
+
+### Results
+> \textcolor{blue}{Insert graphics}
+
+
+\textcolor{red}{Two paragraphs to provide the interpretation of results and your conclusions as it pertains to the original overall question.}
+
+
+## Neural Network
