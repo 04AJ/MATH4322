@@ -57,7 +57,7 @@ summary(heart.logistic1)
 
 **Model 2 - Only include statistically significant predictors**
 
-```{r}
+```{r, warning=FALSE}
 heart.logistic2 =  glm(cardio  ~  age+height+weight+ap_hi+ap_lo+cholesterol+smoke+alco+active
                          ,  family  =  "binomial",
                       data  =  cardio_train)
@@ -65,13 +65,15 @@ heart.logistic2 =  glm(cardio  ~  age+height+weight+ap_hi+ap_lo+cholesterol+smok
 summary(heart.logistic2)
 ```
 
-```{r, output = FALSE}
+```{r,  warning=FALSE}
 step(heart.logistic2)
 ```
 
 **Model 3 - Using predictors from stepwise regression**
 
-```{r}
+\textcolor{red}{Paragraph explaining the results of stepwise regression}
+
+```{r,  warning=FALSE}
 heart.logistic3 = glm(formula = cardio ~ age + height + weight + ap_hi + ap_lo +cholesterol + alco + active, family = "binomial", data = cardio_train)
 summary(heart.logistic3)
 ```
@@ -110,10 +112,10 @@ model_info <- data.frame(
 ```
 
 ### Final Equation for Logistic Regression Model
-> Insert latex equation here
+> \textcolor{blue}{Insert latex equation here}
 
 ### Training/ Validation 
-```{r}
+```{r, warning=FALSE}
 set.seed(100)
 for(i in 1:10){
   # initialize vector to store prediction errors
@@ -139,6 +141,11 @@ test_errors[i] = test_error
 ```
 
 \textcolor{red}{Paragraph explaining the the procedure above and the mean error rate}
+
+### Results
+> \textcolor{blue}{Insert graphics}
+
+
 \textcolor{red}{Two paragraphs to provide the interpretation of results and your conclusions as it pertains to the original overall question.}
 
 
