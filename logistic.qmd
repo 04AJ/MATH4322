@@ -6,12 +6,12 @@ code-block-bg: true
 code-block-border-left: "#31BAE9"
 title-block-style: plain
 ---
+
 ## Introduction
 
 ## Logistic Regression (Ryan Nguyen, Alan Johnson)
 
 \textcolor{red}{Paragraph explaining why we are using logistic regression models and the advantages and disadvantages of the model.}
-
 
 ### Model Formula
 
@@ -52,8 +52,8 @@ heart.logistic1 =  glm(cardio  ~  . - id,  family  =  "binomial",
 summary(heart.logistic1)
 
 ```
-\textcolor{red}{Paragraph explaining which predictors are significant (look at significance table output)}
 
+\textcolor{red}{Paragraph explaining which predictors are significant (look at significance table output)}
 
 **Model 2 - Only include statistically significant predictors**
 
@@ -66,7 +66,7 @@ summary(heart.logistic2)
 ```
 
 ```{r,  warning=FALSE}
-step(heart.logistic2)
+step(heart.logistic1)
 ```
 
 **Model 3 - Using predictors from stepwise regression**
@@ -74,7 +74,9 @@ step(heart.logistic2)
 \textcolor{red}{Paragraph explaining the results of stepwise regression}
 
 ```{r,  warning=FALSE}
-heart.logistic3 = glm(formula = cardio ~ age + height + weight + ap_hi + ap_lo +cholesterol + alco + active, family = "binomial", data = cardio_train)
+heart.logistic3 = glm(formula = cardio ~ age + height + weight + ap_hi + ap_lo + 
+    cholesterol + gluc + smoke + alco + active, family = "binomial", 
+    data = cardio_train)
 summary(heart.logistic3)
 ```
 
@@ -110,11 +112,15 @@ model_info <- data.frame(
 )
 (model_info)
 ```
+## Note: Model 2 removed gender and cholesterol and Model 3 just removed gender
+## Note: Model 3 has the lowest AIC and BIC
 
 ### Final Equation for Logistic Regression Model
+
 > \textcolor{blue}{Insert latex equation here}
 
-### Training/ Validation 
+### Training/ Validation
+
 ```{r, warning=FALSE}
 set.seed(100)
 for(i in 1:10){
@@ -124,7 +130,9 @@ sample= sample.int(n = nrow(cardio_train), size = floor(0.80*nrow(cardio_train))
 train.heart.logistic = cardio_train[sample,]
 test.heart.logistic = cardio_train[-sample,]
 
-train.logistic = glm(cardio ~ age + height + weight + ap_hi + ap_lo +cholesterol + alco + active, data = train.heart.logistic, family = "binomial")
+train.logistic = glm(formula = cardio ~ age + height + weight + ap_hi + ap_lo + 
+    cholesterol + gluc + smoke + alco + active, family = "binomial", 
+    data = cardio_train)
 
 glm.pred = predict.glm(train.logistic, newdata = test.heart.logistic, type = "response")
 
@@ -143,10 +151,8 @@ test_errors[i] = test_error
 \textcolor{red}{Paragraph explaining the the procedure above and the mean error rate}
 
 ### Results
-> \textcolor{blue}{Insert graphics}
 
+> \textcolor{blue}{Insert graphics}
 
 \textcolor{red}{Two paragraphs to provide the interpretation of results and your conclusions as it pertains to the original overall question.}
 
-
-## Neural Network
