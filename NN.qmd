@@ -8,3 +8,83 @@ code-block-border-left: "#31BAE9"
 ---
 
 ## Neural Network Model
+```{r}
+# Imported libraries.
+library(readr)
+library(NeuralNetTools)
+library(nnet)
+
+set.seed(35)
+
+# Import the data from the csv in the correct format.
+setwd("~/RStudio/Spring 2024/MATH 4322/Project/MATH4322")
+cardio.data <- read_delim("cardio_train.csv", delim = ";",
+                           escape_double = FALSE, trim_ws = TRUE)
+
+# Take all of the classification variables as their factors.
+cardio.data$gender = as.factor(cardio.data$gender)
+cardio.data$cholesterol = as.factor(cardio.data$cholesterol)
+cardio.data$gluc = as.factor(cardio.data$gluc)
+cardio.data$smoke = as.factor(cardio.data$smoke)
+cardio.data$alco = as.factor(cardio.data$alco)
+cardio.data$active = as.factor(cardio.data$active)
+cardio.data$cardio = as.factor(cardio.data$cardio)
+
+# Separate the data into 80% training and 20% testing.
+sample = sample(1 : nrow(cardio.data), floor(nrow(cardio.data) * 0.8))
+cardio.train = cardio.data[sample, ]
+cardio.test = cardio.data[-sample, ]
+
+# Build the neural network.
+cardio.model = nnet(cardio ~ . - id - gender, data = cardio.train,
+             size = 6, rang = 0.5, decay = 5e-2, maxit = 5000)
+
+# Print the model's information, plot, summary, and garson plot.
+print(cardio.model)
+plotnet(cardio.model)
+summary(cardio.model)
+garson(cardio.model)
+
+# Training prediction values.
+cardio.train.predict = predict(cardio.model, cardio.train, type = "class")
+cardio.train.values = cardio.train$cardio
+
+# Testing prediction values.
+cardio.test.predict = predict(cardio.model, cardio.test, type = "class")
+cardio.test.values = cardio.test$cardio
+
+# Training confusion matrix.
+cardio.train.table = table(cardio.train.values, cardio.train.predict)
+cardio.train.table
+
+# Testing confusion matrix.
+cardio.test.table = table(cardio.test.values, cardio.test.predict)
+cardio.test.table
+```
+
+Questions:
+Include the inputs and the outputs of the data.
+
+Include the question you are wanting to answer and the response variable.
+
+Why are you using a neural network as one of your models?
+
+What are the advantages and disadvantages of using a neural network model?
+
+Draw a sketch of the neural network, labeling each node.
+
+Why did you choose to use only 1 hidden layer?
+
+Why does the hidden layer have only 6 nodes?
+
+Why was entropy used as the activation function?
+
+Why are the initial weights 0.5?
+
+What can you inference from the garson plot of the neural network?
+
+How does the neural network help inference the factors that contribute to heart disease?
+
+Summarize your findings.
+
+How does the neural network compare to the logistic model?

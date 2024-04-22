@@ -1,0 +1,37 @@
+---
+title: "MATH 4322 Final Project Group 9"
+format: pdf
+highlight-style: github
+code-block-bg: true
+code-block-border-left: "#31BAE9"
+# title-block-style: plain
+---
+```{r}
+library(tree)
+setwd("~/RStudio/Spring 2024/MATH 4322/Project/MATH4322")
+library(readr)
+cardio_train <- read_delim("cardio_train.csv",
+                           delim = ";", escape_double = FALSE, trim_ws = TRUE)
+cardio_train$gender = as.factor(cardio_train$gender)
+cardio_train$cholesterol = as.factor(cardio_train$cholesterol)
+cardio_train$gluc = as.factor(cardio_train$gluc)
+cardio_train$smoke = as.factor(cardio_train$smoke)
+cardio_train$alco = as.factor(cardio_train$alco)
+cardio_train$active = as.factor(cardio_train$active)
+cardio_train$cardio = as.factor(cardio_train$cardio)
+
+summary(cardio_train)
+tree.cardio = tree(cardio ~ . - id - gender, data = cardio_train,
+                   split = "gini", control = tree.control(nrow(cardio_train), mincut = 5000))
+summary(tree.cardio)
+plot(tree.cardio)
+text(tree.cardio)
+
+#cv.cardio = cv.tree(tree.cardio)
+#cv.cardio
+#plot(cv.cardio$size, cv.cardio$dev, type = "b")
+#prune.cardio = prune.tree(tree.cardio, best = 4)
+#plot(prune.cardio)
+#text(prune.cardio)
+```
+
