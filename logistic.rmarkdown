@@ -7,6 +7,7 @@ code-block-border-left: "#31BAE9"
 title-block-style: plain
 ---
 
+
 ## Introduction
 
 ## Logistic Regression (Ryan Nguyen, Alan Johnson)
@@ -14,6 +15,7 @@ title-block-style: plain
 \textcolor{red}{Paragraph explaining why we are using logistic regression models and the advantages and disadvantages of the model.}
 
 ### Model Formula
+
 
 ```{=html}
 <!--
@@ -29,9 +31,11 @@ P(\text{cardio}=1|X) = \frac{
 &+ \beta_{10} \times \text{alco} + \beta_{11} \times \text{active} + \beta_{12} \times \text{cardio}}}
 \end{align}-->
 ```
+
 $$
 P(cardio=1|X) = \frac{e^{(\beta_0 + \beta_1 X_1 + \beta_2 X_2 + \ldots + \beta_n X_n)}}{1 + e^{(\beta_0 + \beta_1 X_1 + \beta_2 X_2 + \ldots + \beta_n X_n)}}
 $$ **Model 1 - Include all predictors**
+
 
 ```{r}
 library(readr)
@@ -53,9 +57,11 @@ summary(heart.logistic1)
 
 ```
 
+
 \textcolor{red}{Paragraph explaining which predictors are significant (look at significance table output)}
 
 **Model 2 - Only include statistically significant predictors**
+
 
 ```{r, warning=FALSE}
 heart.logistic2 =  glm(cardio  ~  age+height+weight+ap_hi+ap_lo+cholesterol+smoke+alco+active
@@ -69,9 +75,11 @@ summary(heart.logistic2)
 step(heart.logistic1)
 ```
 
+
 **Model 3 - Using predictors from stepwise regression**
 
 \textcolor{red}{Paragraph explaining the results of stepwise regression}
+
 
 ```{r,  warning=FALSE}
 heart.logistic3 = glm(formula = cardio ~ age + height + weight + ap_hi + ap_lo + 
@@ -80,7 +88,9 @@ heart.logistic3 = glm(formula = cardio ~ age + height + weight + ap_hi + ap_lo +
 summary(heart.logistic3)
 ```
 
+
 **Determining Best Model**
+
 ```{r}
 extract_info  = function(model) {
   deviance <- summary(model)$null.deviance
@@ -112,6 +122,7 @@ model_info <- data.frame(
 )
 (model_info)
 ```
+
 ## Note: Model 2 removed gender and cholesterol and Model 3 just removed gender
 ## Note: Model 3 has the lowest AIC and BIC
 
@@ -120,6 +131,7 @@ model_info <- data.frame(
 > \textcolor{blue}{Insert latex equation here}
 
 ### Training/ Validation
+
 
 ```{r, warning=FALSE}
 set.seed(100)
@@ -146,6 +158,7 @@ test_errors[i] = (tab[2]+tab[3])/(tab[1]+tab[2]+tab[3]+tab[4])
 
 ```
 
+
 \textcolor{red}{Paragraph explaining the the procedure above and the mean error rate}
 
 ### Results
@@ -153,4 +166,5 @@ test_errors[i] = (tab[2]+tab[3])/(tab[1]+tab[2]+tab[3]+tab[4])
 > \textcolor{blue}{Insert graphics}
 
 \textcolor{red}{Two paragraphs to provide the interpretation of results and your conclusions as it pertains to the original overall question.}
+
 
