@@ -71,23 +71,48 @@ Include the inputs and the outputs of the data.
 
     -   age
 
+        -   Shown in days.
+
     -   height
+
+        -   Shown in cm.
 
     -   weight
 
+        -   Shown in float kg.
+
+    -   gender
+
+        -   Shown as a categorical code.
+
     -   ap_hi
+
+        -   Systolic blood pressure.
 
     -   ap_lo
 
+        -   Diastolic blood pressure.
+
     -   cholesterol
+
+        -   Shown in three different ways: 1: normal cholesterol, 2: above
+            normal cholesterol, and 3: well above cholesterol.
 
     -   gluc
 
+        -   Shown in three different ways: gluc1: normal glucose, gluc2: above normal glucose, and gluc3: well above normal glucose.
+
     -   smoke
+
+        -   Binary classification variable: smoke0: non-smoker, smoke1: smoker.
 
     -   alco
 
+        -   Binary classification variable: alco0: low alcohol intake, alco1: high alcohol intake.
+
     -   active
+
+        -   Binary classification variable: active0: low physical activity, active1: regular physical activity.
 
 Include the question you are wanting to answer and the response variable.
 
@@ -95,11 +120,11 @@ Include the question you are wanting to answer and the response variable.
 
     -   cardio
 
-        -   indicates the presence or absence of cardiovascular disease.
+        -   Indicates the presence or absence of cardiovascular disease.
 
--    Question we are trying to answer:
+Question we are trying to answer:
 
-    -    How do lifestyle factors correlate with the risk of developing cardiovascular disease?
+-   How do lifestyle factors correlate with the risk of developing cardiovascular disease?
 
 Why are you using a neural network as one of your models?
 
@@ -109,7 +134,7 @@ What are the advantages and disadvantages of using a neural network model?
 
 -   Advantages of using a neural network model is that it can handle complex data that is not linear and adapt to changing input, also neural networks can detect all possible interactions between predictor variables, and it can also be developed using multiple different training algorithms.
 
--    While some of the disadvantages can be the \"black-box\" nature and have limited ability to identify possible casual relationships, and also limited to the computational power that we have access to, as having additional data or adding more complexity could affect the time to compute a model.
+-   While some of the disadvantages can be the "black-box" nature and have limited ability to identify possible casual relationships, and also limited to the computational power that we have access to, as having additional data or adding more complexity could affect the time to compute a model.
 
 Draw a sketch of the neural network, labeling each node.
 
@@ -123,15 +148,52 @@ Why does the hidden layer have only 6 nodes?
 
 Why was entropy used as the activation function?
 
+-   Regarding the nnet() function in R, "entropy" refers to the cross-entropy loss
+    function, not an activation function. Cross-entropy is used to optimize classification accuracy by
+    penalizing the difference between predicted probabilities and actual class labels. It complements
+    the logistic and softmax activation functions used in nnet() for binary and multi-class
+    classification, respectively. Thus, the term "entropy" describes the loss function used for training
+    the model efficiently.
+
 Why are the initial weights 0.5?
+
+-   The initial weights in a neural network play a crucial part in the learning process, as
+    it affect the speed of convergence in a neural network. The reason why weights can\'t generally
+    be set to 0 is because the neurons in the network would receive the same signal and, therefore,
+    will create inefficiency in training. This is why we decided to use 0.5 to make sure that the
+    neurons are small enough to ensure that there's no numerical instability---allowing the learning to
+    be normal, rather than too slow or diverging.
 
 What can you inference from the garson plot of the neural network?
 
+-   The Garson plot is used to interpret the relative importance of input features in a
+    neural network. It decomposes the neural network weights into contributions by each input
+    variable toward the output. In the Garson plot that we produced, it can be inference that the
+    variables cholesterol, gluc, and smoke were the variables that had the most significant factors
+    in the cardio dataset, as these factors had the strongest correlation to increased risk of heart
+    disease.
+
 How does the neural network help inference the factors that contribute to heart disease?
+
+-   By analyzing the weights and influence of different inputs in the network, you can
+    identify which factors are most predictive of cardiovascular diseases. This insight can help in
+    understanding risk factors better and potentially guiding preventive measures as people who have
+    significant predictors as lifestyle factors can be aware of the at-risk factors.
 
 Summarize your findings.
 
+-   The neural network model, trained on various patient health metrics, can predict the
+    presence of cardiovascular disease with a reasonable level of accuracy. The model identifies key
+    predictors and their influence, offering insights into the underlying patterns and risk factors
+    associated with cardiovascular conditions.
+
 How does the neural network compare to the logistic model?
+
+-   The neural network model had a slightly lower test error rate than the logistic
+    model with a 26.38% testing error rate compared to a 27.74% testing error rate of the logistic
+    model. Thus displaying that the neural network model performed better on the testing data set
+    than the logistic model. The neural network model also better indicated which predictors are
+    more statistically significant in causing heart disease.
 
 Introductory paragraph?
 
