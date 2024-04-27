@@ -63,19 +63,63 @@ cardio.test.table = table(cardio.test.values, cardio.test.predict)
 cardio.test.table
 ```
 
-Questions: Include the inputs and the outputs of the data.
+Questions:
+
+Include the inputs and the outputs of the data.
+
+-   Input
+
+    -   age
+
+    -   height
+
+    -   weight
+
+    -   ap_hi
+
+    -   ap_lo
+
+    -   cholesterol
+
+    -   gluc
+
+    -   smoke
+
+    -   alco
+
+    -   active
 
 Include the question you are wanting to answer and the response variable.
 
+-   Output (response variable)
+
+    -   cardio
+
+        -   indicates the presence or absence of cardiovascular disease.
+
+-    Question we are trying to answer:
+
+    -    How do lifestyle factors correlate with the risk of developing cardiovascular disease?
+
 Why are you using a neural network as one of your models?
 
+-   We choose a Neural network model as we wanted to see if the dataset contained more complex data that possibly not linear, as well as investigating all possible interactions between the input variables and having an effect on the response variable.
+
 What are the advantages and disadvantages of using a neural network model?
+
+-   Advantages of using a neural network model is that it can handle complex data that is not linear and adapt to changing input, also neural networks can detect all possible interactions between predictor variables, and it can also be developed using multiple different training algorithms.
+
+-    While some of the disadvantages can be the \"black-box\" nature and have limited ability to identify possible casual relationships, and also limited to the computational power that we have access to, as having additional data or adding more complexity could affect the time to compute a model.
 
 Draw a sketch of the neural network, labeling each node.
 
 Why did you choose to use only 1 hidden layer?
 
+-   We decided to use a single hidden layer as our data did not deviate that much from a linear relationship and did not have as much noise thus the data not being as complex, we decided a single hidden layer would be optimal.
+
 Why does the hidden layer have only 6 nodes?
+
+-   We decided that using 6 nodes in the hidden layer would be a good starting point for our model as it was half of our initial input nodes which was 12. However, we found out it's essential to validate this choice through testing and adjust based on the specific needs and outcomes of your model's performance on validation datasets and could be implemented in further iterations of the model.
 
 Why was entropy used as the activation function?
 
@@ -88,3 +132,7 @@ How does the neural network help inference the factors that contribute to heart 
 Summarize your findings.
 
 How does the neural network compare to the logistic model?
+
+Introductory paragraph?
+
+In this report, we employ a neural network to investigate the correlation between lifestyle factors---such as diet, exercise, and smoking---and the risk of cardiovascular disease. Using inputs ranging from physiological data to behavioral patterns, we aim to predict the occurrence of cardiovascular conditions. This analysis is designed to highlight key lifestyle influences on heart health and inform preventative strategies.
