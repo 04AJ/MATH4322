@@ -11,20 +11,13 @@ title-block-style: plain
 
 ## Logistic Regression (Ryan Nguyen, Alan Johnson)
 
-Advantages: Interpretability: Logistic regression coefficients represent the log of the odds ratio, making it easier to interpret the impact of each predictor variable on the probability of the outcome.
-Efficiency: Logistic regression can handle large datasets efficiently, making it suitable for real-time predictions.
-Low Variance: It tends to perform well with small datasets and is less prone to overfitting compared to more complex models.
-Assumption of Independence: Logistic regression doesn't require the predictors to be independent of each other, unlike some other models like Naive Bayes.
+Advantages: Interpretability: Logistic regression coefficients represent the log of the odds ratio, making it easier to interpret the impact of each predictor variable on the probability of the outcome. Efficiency: Logistic regression can handle large datasets efficiently, making it suitable for real-time predictions. Low Variance: It tends to perform well with small datasets and is less prone to overfitting compared to more complex models. Assumption of Independence: Logistic regression doesn't require the predictors to be independent of each other, unlike some other models like Naive Bayes.
 
-Disadvantages: Assumption of Linearity: Logistic regression assumes a linear relationship between the independent variables and the logit of the outcome variable. If this assumption is violated, the model's performance may suffer.
-Limited Outcome: It's primarily designed for binary classification tasks and may not perform well with multi-class classification without modifications. Sensitivity to Outliers: Logistic regression can be sensitive to outliers, which may disproportionately influence the model's coefficients and predictions.
-Not Suitable for Complex Relationships: If the relationship between predictors and the log-odds of the outcome is highly non-linear or complex, logistic regression may not capture it effectively.
+Disadvantages: Assumption of Linearity: Logistic regression assumes a linear relationship between the independent variables and the logit of the outcome variable. If this assumption is violated, the model's performance may suffer. Limited Outcome: It's primarily designed for binary classification tasks and may not perform well with multi-class classification without modifications. Sensitivity to Outliers: Logistic regression can be sensitive to outliers, which may disproportionately influence the model's coefficients and predictions. Not Suitable for Complex Relationships: If the relationship between predictors and the log-odds of the outcome is highly non-linear or complex, logistic regression may not capture it effectively.
 
 ### Model Formula
 
-
-
-
+```{=tex}
 \begin{align}
 P(\text{cardio}=1|X) = \frac{%
 \begin{aligned}[t]
@@ -40,24 +33,24 @@ P(\text{cardio}=1|X) = \frac{%
 \end{aligned}
 }
 \end{align}
-
+```
 **Model 1 - Include all predictors**
 
 ```{r}
 library(readr)
-cardio_train <- read_delim("cardio_train.csv",
+cardio.data <- read_delim("cardio_train.csv",
                            delim = ";", escape_double = FALSE, trim_ws = TRUE)
 
-cardio_train$gender = as.factor(cardio_train$gender)
-cardio_train$cholesterol = as.factor(cardio_train$cholesterol)
-cardio_train$gluc = as.factor(cardio_train$gluc)
-cardio_train$smoke = as.factor(cardio_train$smoke)
-cardio_train$alco = as.factor(cardio_train$alco)
-cardio_train$active = as.factor(cardio_train$active)
-cardio_train$cardio = as.factor(cardio_train$cardio)
+cardio.data$gender = as.factor(cardio.data$gender)
+cardio.data$cholesterol = as.factor(cardio.data$cholesterol)
+cardio.data$gluc = as.factor(cardio.data$gluc)
+cardio.data$smoke = as.factor(cardio.data$smoke)
+cardio.data$alco = as.factor(cardio.data$alco)
+cardio.data$active = as.factor(cardio.data$active)
+cardio.data$cardio = as.factor(cardio.data$cardio)
 
 heart.logistic1 =  glm(cardio  ~  . - id,  family  =  "binomial",
-                      data  =  cardio_train)
+                      data  =  cardio.data)
 
 summary(heart.logistic1)
 
@@ -67,14 +60,12 @@ Predictors with p-values less than 0.05 are considered significant. For example,
 
 **Model 2 - Only include statistically significant predictors**
 
-
 We will use the significant predictors found from heart.logistic1 to to create Model 2. This means all predictors except for id, gender, and glucose will be included.
 
-
-```{r, warning=FALSE}
+```{r, warning = FALSE, output = FALSE}
 heart.logistic2 =  glm(cardio  ~  age+height+weight+ap_hi+ap_lo+cholesterol+smoke+alco+active
                          ,  family  =  "binomial",
-                      data  =  cardio_train)
+                      data  =  cardio.data)
 
 summary(heart.logistic2)
 ```
@@ -91,16 +82,16 @@ After the stepwise regression process, the final selected predictors were age, h
 
 Interpretation of Results: The coefficients in the final model represent the log odds of the outcome (cardiovascular disease) associated with each unit change in the predictor, holding other predictors constant. For example, a positive coefficient for a predictor indicates an increase in the log odds of cardiovascular disease with an increase in that predictor, while a negative coefficient indicates a decrease in the log odds. The significance of each predictor is determined by its corresponding p-value, with predictors having p-values less than the chosen significance level (typically 0.05) considered statistically significant.
 
-```{r,  warning=FALSE}
+```{r, warning = FALSE, output = FALSE}
 heart.logistic3 = glm(formula = cardio ~ age + height + weight + ap_hi + ap_lo + 
     cholesterol + gluc + smoke + alco + active, family = "binomial", 
-    data = cardio_train)
+    data = cardio.data)
 summary(heart.logistic3)
 ```
 
 **Determining Best Model**
 
-```{r}
+```{r, warning = FALSE, echo = FALSE}
 extract_info  = function(model) {
   deviance <- summary(model)$null.deviance
   residual_deviance <- summary(model)$deviance
@@ -136,6 +127,7 @@ It is evident that \textcolor{red}{Model 3} is the best model out of all the reg
 
 ### Final Equation for Logistic Regression Model
 
+```{=tex}
 \begin{align}
 P(\text{cardio}=1|X) = \frac{%
 \begin{aligned}[t]
@@ -153,21 +145,21 @@ P(\text{cardio}=1|X) = \frac{%
 \end{aligned}
 }
 \end{align}
-
+```
 ### Training/ Validation
 
-```{r, warning=FALSE}
+```{r, warning = FALSE, echo = FALSE}
 set.seed(100)
 test_errors = numeric(10)
 for(i in 1:10){
   # initialize vector to store prediction errors
-sample= sample.int(n = nrow(cardio_train), size = floor(0.80*nrow(cardio_train)))
-train.heart.logistic = cardio_train[sample,]
-test.heart.logistic = cardio_train[-sample,]
+sample= sample.int(n = nrow(cardio.data), size = floor(0.80*nrow(cardio.data)))
+train.heart.logistic = cardio.data[sample,]
+test.heart.logistic = cardio.data[-sample,]
 
 train.logistic = glm(formula = cardio ~ age + height + weight + ap_hi + ap_lo + 
     cholesterol + gluc + smoke + alco + active, family = "binomial", 
-    data = cardio_train)
+    data = cardio.data)
 
 glm.pred = predict.glm(train.logistic, newdata = test.heart.logistic, type = "response")
 
@@ -177,24 +169,21 @@ tab = table(val, test.heart.logistic$cardio)
 test_errors[i] = (tab[2]+tab[3])/(tab[1]+tab[2]+tab[3]+tab[4])
 }
 (mean_test_error = mean(test_errors))
-
-
 ```
 
+The dataset is randomly split into training and validation sets using an 80-20 split. The logistic regression model uses predictors from heart.logistic3 which are age, height, weight, blood pressure (ap_hi and ap_lo), cholesterol level, glucose level, smoking status, alcohol consumption, and physical activity.
 
-The dataset is randomly split into training and validation sets using an 80-20 split. The logistic regression model uses predictors from heart.logistic3 which are age, height, weight, blood pressure (ap_hi and ap_lo), cholesterol level, glucose level, smoking status, alcohol consumption, and physical activity. 
+The trained model is then used to predict the probability of cardiovascular disease for the validation set using the predict.glm() function.
 
-The trained model is then used to predict the probability of cardiovascular disease for the validation set using the predict.glm() function. 
+Predicted probabilities are converted to binary predictions using a threshold of 0.5, where probabilities greater than 0.5 are classified as 1 (indicating presence of cardiovascular disease) and probabilities less than or equal to 0.5 are classified as 0 (indicating absence of cardiovascular disease).
 
-Predicted probabilities are converted to binary predictions using a threshold of 0.5, where probabilities greater than 0.5 are classified as 1 (indicating presence of cardiovascular disease) and probabilities less than or equal to 0.5 are classified as 0 (indicating absence of cardiovascular disease). 
+The test error rate is calculated by creating a confusion matrix and dividing the sum of the misclassified observations (false positives and false negatives) by all the observations. Mean Test Error Rate Calculation: The mean error rate is calculated by averaging the test error rates obtained from 10 iterations of the validation process. In each iteration, the logistic regression model is trained on a randomly selected 80% of the data, and the mean error rate is calculated based on predictions made on the remaining 20% of the data. The test error rate provides an estimate of the model's performance in predicting cardiovascular disease risk.
 
-The test error rate is calculated by creating a confusion matrix and dividing the sum of the misclassified observations (false positives and false negatives) by all the observations. Mean Test Error Rate Calculation: The mean error rate is calculated by averaging the test error rates obtained from 10 iterations of the validation process. In each iteration, the logistic regression model is trained on a randomly selected 80% of the data, and the mean error rate is calculated based on predictions made on the remaining 20% of the data. The test error rate provides an estimate of the model's performance in predicting cardiovascular disease risk. 
-
-Mean Error Rate Result: The mean error rate obtained from the validation process is approximately 27.74%. This indicates that, on average, the logistic regression model misclassifies cardiovascular disease status in the validation set for 27.74% of observations. 
+Mean Error Rate Result: The mean error rate obtained from the validation process is approximately 27.74%. This indicates that, on average, the logistic regression model misclassifies cardiovascular disease status in the validation set for 27.74% of observations.
 
 ### Results
 
-Based on the logistic regression models trained and validated for predicting cardiovascular disease risk, several important insights can be drawn. 
+Based on the logistic regression models trained and validated for predicting cardiovascular disease risk, several important insights can be drawn.
 
 The inclusion of statistically significant predictors, such as age, blood pressure, cholesterol levels, smoking status, alcohol consumption, and physical activity, in the final models underscores their crucial roles in assessing cardiovascular risk. These findings align with established medical knowledge regarding the impact of these factors on heart health. Additionally, the error rate obtained from the validation process indicates that the logistic regression models are performing well in predicting cardiovascular disease status, with an average misclassification rate of only around 27.74%.
 

@@ -7,44 +7,8 @@ code-block-border-left: "#31BAE9"
 # title-block-style: plain
 ---
 
-
-
 ## Neural Network Model
-```{r}
-library(readr)
-cardio_train <- read_delim("cardio_train.csv",
-                           delim = ";", escape_double = FALSE, trim_ws = TRUE)
 
-cardio_train$gender = as.factor(cardio_train$gender)
-cardio_train$cholesterol = as.factor(cardio_train$cholesterol)
-cardio_train$gluc = as.factor(cardio_train$gluc)
-cardio_train$smoke = as.factor(cardio_train$smoke)
-cardio_train$alco = as.factor(cardio_train$alco)
-cardio_train$active = as.factor(cardio_train$active)
-cardio_train$cardio = as.factor(cardio_train$cardio)
-
-```
-
-```{r}
-
-library(neuralnet) 
-library(NeuralNetTools) 
-library(nnet) 
-
-#Import  dataset  ResturantTips 
-attach(cardio_train) 
-
-
-#Train  the  model  based  on  output  from  imput 
-model  =  nnet(cardio  ~  . -gender -id, 
-data  =  cardio_train, 
-size  =  5, 
-rang  =  0.1, 
-decay  =  5e-2, 
-maxit  =  5000) 
-print(model) 
-
-```
 ```{r}
 # Imported libraries.
 library(readr)
@@ -99,8 +63,7 @@ cardio.test.table = table(cardio.test.values, cardio.test.predict)
 cardio.test.table
 ```
 
-Questions:
-Include the inputs and the outputs of the data.
+Questions: Include the inputs and the outputs of the data.
 
 Include the question you are wanting to answer and the response variable.
 
