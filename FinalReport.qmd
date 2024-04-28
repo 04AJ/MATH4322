@@ -1,7 +1,7 @@
 ---
 title: "Cardiovascular Disease Report"
 authors: "Valerio Martinez, Cruz Salas, Ryan Nguyen, Simrat Clair, Alan Johnson"
-date: 2024-04-27
+date: 2024-04-28
 format: pdf
 highlight-style: github
 code-block-bg: true
@@ -13,7 +13,7 @@ title-block-style: plain
 
 # Introduction
 
-Our project involves analyzing the Cardiovascular Disease dataset found on Kaggle to analyze which factors significantly contribute to the development of cardiovascular disease in an individual. We were inspired by lecture 9, which introduced logistic regression using the BreastCancer dataset to analyze attributes of cells that imply whether it is benign or malignant. The dataset contains exactly 70,000 observations, in which each observation is associated with 13 variables.
+Our project involves analyzing the Cardiovascular Disease dataset found on Kaggle to determine which factors significantly contribute to the development of cardiovascular disease in an individual. We were inspired by lecture 9, which introduced logistic regression using the BreastCancer dataset to analyze attributes of cells that imply whether it is benign or malignant. The dataset contains exactly 70,000 observations, in which each observation is associated with 13 variables.
 
 **Input Descriptions:**
 
@@ -98,7 +98,6 @@ We will use the significant predictors found from heart.logistic1 to to create M
 heart.logistic2 =  glm(cardio  ~  age+height+weight+ap_hi+ap_lo+cholesterol+smoke+alco+active
                          ,  family  =  "binomial",
                       data  =  cardio.data)
-summary(heart.logistic2)
 ```
 
 We next applied the step() function on the initial model (heart.logistic1) to perform stepwise regression based on the Akaike Information Criterion (AIC). The stepwise process sequentially evaluates each predictor's contribution to the model and removes predictors that do not significantly improve the model fit, based on AIC.
@@ -117,7 +116,6 @@ The coefficients in the final model represent the log odds of the outcome (cardi
 heart.logistic3 = glm(formula = cardio ~ age + height + weight + ap_hi + ap_lo + 
     cholesterol + gluc + smoke + alco + active, family = "binomial", 
     data = cardio.data)
-summary(heart.logistic3)
 ```
 
 **Determining Best Model**
@@ -210,18 +208,22 @@ Predicted probabilities are converted to binary predictions using a threshold of
 
 The test error rate is calculated by creating a confusion matrix and dividing the sum of the missclassified observations (false positives and false negatives) by all the observations. Mean Test Error Rate Calculation: The mean error rate is calculated by averaging the test error rates obtained from 10 iterations of the validation process. In each iteration, the logistic model is trained on a randomly selected 80% of the data, and the mean error rate is calculated based on predictions made on the remaining 20% of the data. The test error rate provides an estimate of the model's performance in predicting cardiovascular disease risk.
 
-Mean Error Rate Result: The mean error rate obtained from the validation process is approximately 27.74%. This indicates that, on average, the logistic model misclassifies cardiovascular disease status in the validation set for 27.74% of observations.
+The mean error rate obtained from the validation process is approximately 27.74%. This indicates that, on average, the logistic model misclassifies cardiovascular disease status in the validation set for 27.74% of observations.
 
 ### Results
 
+```{r}
+summary(heart.logistic3)
+```
+
 The inclusion of statistically significant predictors, such as age, blood pressure, cholesterol levels, smoking status, alcohol consumption, and physical activity, in the final models underscores their crucial roles in assessing cardiovascular risk. These findings align with established medical knowledge regarding the impact of these factors on heart health. Additionally, the error rate obtained from the validation process indicates that the logistic models are performing well in predicting cardiovascular disease status, with an average error rate of only around 27.74%.
 
-Overall, the results suggest that logistic modeling, when incorporating significant predictors, can effectively predict cardiovascular disease risk. By leveraging key demographic, clinical, and lifestyle factors, healthcare practitioners can utilize these models to identify individuals at higher risk of cardiovascular disease and tailor preventive strategies and interventions accordingly. These findings contribute to a better understanding of cardiovascular risk assessment and highlight the potential of logistic models in supporting proactive heart health management strategies.
+Overall, the results suggest that the logistic model, when incorporating significant predictors, can effectively predict cardiovascular disease risk. By leveraging key demographic, clinical, and lifestyle factors, healthcare practitioners can utilize these models to identify individuals at higher risk of cardiovascular disease and tailor preventive strategies and interventions accordingly. These findings contribute to a better understanding of cardiovascular risk assessment and highlight the potential of logistic models in supporting proactive heart health management strategies.
 \newpage
 
 ## Neural Network Model (Valerio Martinez, Simrat Clair, Cruz Salas)
 
-We choose a Neural network model as we wanted to see if the dataset contained more complex data that possibly not linear, as well as investigating all possible interactions between the input variables and having an effect on the response variable.
+We chose a Neural network model as we wanted to see if the dataset contained more complex relationships that are not linear, as well as investigating all possible interactions between the input variables having an effect on the response variable.
 
 Advantages of using a neural network model is that it can handle complex data that is not linear and adapt to changing input, also neural networks can detect all possible interactions between predictor variables, and it can also be developed using multiple different training algorithms.
 
@@ -229,7 +231,7 @@ While some of the disadvantages can be the "black-box" nature and have limited a
 
 ### Neural Network Sketch
 
-![Neural Network Concept](nn_sketch.jpg){width="6in"}
+![Neural Network Concept](nn_sketch.jpg){width="7in"}
 
 ```{r, echo = FALSE, output = FALSE}
 # Imported libraries.
@@ -275,19 +277,22 @@ cardio.test = cardio.data[-sample, ]
 cardio.model = nnet(cardio ~ . - id - gender, data = cardio.train,
              size = 6, rang = 0.5, decay = 5e-2, maxit = 5000)
 
-# Print the model's information, plot, summary, and garson plot.
+# Print the model's information, plot, and summary
 print(cardio.model)
+par(mfrow = c(1, 1), mar = c(1, 1, 1, 1))
 plotnet(cardio.model)
-# summary(cardio.model)
+```
+### Results
+```{r}
 garson(cardio.model)
 ```
 
-The Garson plot is used to interpret the relative importance of input features in a neural network. It decomposes the neural network weights into contributions by each input variable toward the output. In the Garson plot that we produced, it can be inference that the variables **cholesterol, gluc, and smoke** were the variables that had the most significant factors in the cardio dataset, as these factors had the strongest correlation to increased risk of heart disease.
+The Garson plot is used to interpret the relative importance of input features in a neural network. It decomposes the neural network weights into contributions by each input variable toward the output. In the Garson plot that we produced, it can be inferred that the variables **cholesterol, gluc, and smoke** were the variables that had the most significant factors in the cardio dataset, as these factors had the strongest correlation to increased risk of heart disease.
 
-### Results
+By analyzing the weights and influence of different inputs in the network, you can identify which factors are most predictive of cardiovascular diseases. This insight can help in understanding risk factors better and potentially guiding preventive measures as people who have significant predictors as lifestyle factors can be aware of the at-risk factors. The neural network model, trained on various patient health metrics, can predict the presence of cardiovascular disease with a reasonable level of accuracy. The model identifies key predictors and their influence, offering insights into the underlying patterns and risk factors associated with cardiovascular conditions.
+\newpage
 
 ```{r, echo = FALSE}
-
 # Training prediction values.
 cardio.train.predict = predict(cardio.model, cardio.train, type = "class")
 cardio.train.values = cardio.train$cardio
@@ -305,7 +310,7 @@ cardio.test.table = table(cardio.test.values, cardio.test.predict)
 cardio.test.table
 ```
 
-By analyzing the weights and influence of different inputs in the network, you can identify which factors are most predictive of cardiovascular diseases. This insight can help in understanding risk factors better and potentially guiding preventive measures as people who have significant predictors as lifestyle factors can be aware of the at-risk factors. The neural network model, trained on various patient health metrics, can predict the presence of cardiovascular disease with a reasonable level of accuracy. The model identifies key predictors and their influence, offering insights into the underlying patterns and risk factors associated with cardiovascular conditions.
+The Neural Network had a testing error rate of 26.38% as seen by the confusion matrix. The model helped answer our research question by indicating factors such as cholesterol, gluc, and smoke increase the rizk of developing cardiovascular disease.
 
 # Conclusion
 
